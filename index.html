@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapa de Sanación Integral</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #fff, #e0f7fa);
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+    h1 {
+      text-align: center;
+      padding-top: 30px;
+      color: #004d40;
+      animation: fadeIn 2s ease-in;
+    }
+    .petal {
+      width: 160px;
+      height: 160px;
+      background: #80cbc4;
+      border-radius: 50% 50% 0 0;
+      position: absolute;
+      transform-origin: bottom center;
+      opacity: 0;
+      animation: popIn 1s ease forwards;
+      cursor: pointer;
+    }
+    .label {
+      position: absolute;
+      color: #004d40;
+      font-weight: bold;
+      text-align: center;
+      width: 140px;
+      margin-left: -70px;
+      margin-top: -15px;
+      cursor: pointer;
+    }
+    .icon {
+      display: block;
+      font-size: 28px;
+      margin: 4px auto;
+    }
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 160px;
+      height: 160px;
+      margin-left: -80px;
+      margin-top: -80px;
+      background: #00796b;
+      border-radius: 50%;
+      text-align: center;
+      color: white;
+      font-size: 18px;
+      line-height: 160px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 500px;
+      text-align: center;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Mapa de Sanación Integral</h1>
+  <div class="center">Salud Integral</div>
+  <div id="modal" class="modal">
+    <div class="modal-content" id="modal-content"></div>
+    <div class="close" onclick="document.getElementById('modal').style.display='none'">&times;</div>
+  </div>
+  <script>
+    const categories = [
+      { title: "Cuerpo físico", content: "Incluye ejercicio, sistema inmune, respiración y fisioterapia.", icon: "💪" },
+      { title: "Cuerpo emocional", content: "Gestión emocional, trauma, mindfulness y escritura terapéutica.", icon: "💖" },
+      { title: "Cuerpo energético", content: "Chakras, reiki, acupuntura, armonización energética.", icon: "🔮" },
+      { title: "Alimentación terapéutica", content: "Dieta antiinflamatoria, ayuno, microbiota saludable.", icon: "🥗" },
+      { title: "Espiritualidad y propósito", content: "Sentido de vida, meditación, conexión interior.", icon: "🧘‍♂️" },
+      { title: "Terapias integrativas", content: "Homeopatía, fitoterapia, osteopatía, mente-cuerpo.", icon: "🌿" },
+      { title: "Medicina convencional", content: "Diagnóstico clínico, fármacos, cirugía y urgencias.", icon: "🏥" }
+    ];
+
+    const radius = 250;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    categories.forEach((cat, i) => {
+      const angle = (2 * Math.PI / categories.length) * i;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.left = `${x - 80}px`;
+      petal.style.top = `${y - 80}px`;
+      petal.style.transform = `rotate(${angle}rad)`;
+      petal.style.animationDelay = `${0.5 + i * 0.4}s`;
+      petal.onclick = () => showModal(cat.title, cat.content);
+      document.body.appendChild(petal);
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.innerHTML = `<div class='icon'>${cat.icon}</div>${cat.title}`;
+      label.style.left = `${x}px`;
+      label.style.top = `${y + 90}px`;
+      label.onclick = () => showModal(cat.title, cat.content);
+      document.body.appendChild(label);
+    });
+
+    function showModal(title, content) {
+      const modal = document.getElementById('modal');
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `<h2>${title}</h2><p>${content}</p>`;
+      modal.style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
