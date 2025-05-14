@@ -116,32 +116,36 @@
       { title: "Medicina convencional", content: "Diagnóstico clínico, fármacos, cirugía y urgencias.", icon: "🏥" }
     ];
 
-    const radius = 250;
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+    function renderMap() {
+      document.querySelectorAll('.petal, .label').forEach(el => el.remove());
 
-    categories.forEach((cat, i) => {
-      const angle = (2 * Math.PI / categories.length) * i;
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const radius = Math.min(centerX, centerY) - 100;
 
-      const petal = document.createElement('div');
-      petal.className = 'petal';
-      petal.style.left = `${x - 80}px`;
-      petal.style.top = `${y - 80}px`;
-      petal.style.transform = `rotate(${angle}rad)`;
-      petal.style.animationDelay = `${0.5 + i * 0.4}s`;
-      petal.onclick = () => showModal(cat.title, cat.content);
-      document.body.appendChild(petal);
+      categories.forEach((cat, i) => {
+        const angle = (2 * Math.PI / categories.length) * i;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
 
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.innerHTML = `<div class='icon'>${cat.icon}</div>${cat.title}`;
-      label.style.left = `${x}px`;
-      label.style.top = `${y + 90}px`;
-      label.onclick = () => showModal(cat.title, cat.content);
-      document.body.appendChild(label);
-    });
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.style.left = `${x - 80}px`;
+        petal.style.top = `${y - 80}px`;
+        petal.style.transform = `rotate(${angle}rad)`;
+        petal.style.animationDelay = `${0.5 + i * 0.4}s`;
+        petal.onclick = () => showModal(cat.title, cat.content);
+        document.body.appendChild(petal);
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.innerHTML = `<div class='icon'>${cat.icon}</div>${cat.title}`;
+        label.style.left = `${x}px`;
+        label.style.top = `${y + 90}px`;
+        label.onclick = () => showModal(cat.title, cat.content);
+        document.body.appendChild(label);
+      });
+    }
 
     function showModal(title, content) {
       const modal = document.getElementById('modal');
@@ -149,6 +153,10 @@
       modalContent.innerHTML = `<h2>${title}</h2><p>${content}</p>`;
       modal.style.display = 'flex';
     }
+
+    window.addEventListener('load', renderMap);
+    window.addEventListener('resize', renderMap);
   </script>
 </body>
 </html>
+
